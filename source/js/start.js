@@ -2,18 +2,19 @@ var redux = require('redux');
 var createLogger = require('redux-logger');
 var reducer = require('./reducer');
 var socket = require('socket.io-client')('http://localhost:8080');
+var remoteActionsMiddleware = require('./middleware');
 
 var logger = createLogger();
 
-var store = redux.createStore(reducer, redux.applyMiddleware(logger));
+var store = redux.createStore(reducer, redux.applyMiddleware(logger, remoteActionsMiddleware(socket)));
 
-//var renderVote = require('renderVote');
+var renderVote = require('./renderVote');
 //var renderResults = require('renderResults');
 //
-//store.subscribe(function () {
-//	renderVote();
+store.subscribe(function () {
+	renderVote(store.getState());
 //	renderResults();
-//});
+});
 
 function listen() {
 	socket.on('state', function(state){

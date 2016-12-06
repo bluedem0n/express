@@ -1,47 +1,43 @@
+var store = require('./start').store;
+
 function renderVote(state) {
-		var pair = state.vote.pair;
-
-		var options = '';
-
-		pair.forEach(function (ele) {
-			options += (
-				'<button type="button" class="opciones">' +
-				ele +
-				'</button>'
-			);
-		});
+	if (!state.vote) {
 		var mount = $('#options-mount');
-		var button = mount.append(options);
-		var optionsbuttons = $('.opciones');
-		if(optionsbuttons.click(function(){
 
-			var divcheck = $('#check');
-			var check = '<div class="check"></div>';
-			divcheck.append(check);
-			$(this).append(divcheck);
-			$(optionsbuttons).attr('disabled',true);
-			window.localStorage.setItem('vote',$(this)[0].textContent);
-			setTimeout(secondoptions, 2000);
+		if (mount.length) {
+			mount.append('<div>lo sentimos no hay votación activa</div>');
+		 }
 
-			function secondoptions(){
-				$(optionsbuttons).hide("slow", function(){
-					var contenedorCaja = $('#next-option');
-					var caja = '<button type="button" class="next"></button>';
-					contenedorCaja.append(caja);
-					var botones2= $(".next");
-					botones2[0].textContent='peli3';
-					botones2[1].textContent=window.localStorage.getItem('vote');
+		 return null;
+	}
 
-					var buttonsecond = $('.next');
-					if(buttonsecond.click(function(){
+	var pair = state.vote.pair;
+	var options = '';
 
-						var divcheck = $('#check');
-						var check = '<div class="check"></div>';
-						divcheck.append(check);
-						$(this).append(divcheck);
-						$(buttonsecond).attr('disabled',true);
-					}));
-				});
-			};
-		}));
-	};
+	var votedEntry = state.hasVoted;
+
+	var disabled = votedEntry
+		? 'disabled'
+		: '';
+
+	pair.forEach(function (ele) {
+		options += (
+			'<button type="button" class="opciones js-option" data-option="' + ele +'" ' + disabled + '>' +
+				ele +
+			'</button>'
+		);
+	});
+
+	if (votedEntry) {
+		options += '<div>Has votado por: ' + votedEntry + '</div>';
+	}
+
+	var mount = $('#options-mount');
+
+	if (mount.length) {
+		mount.empty();
+		mount.append(options);
+	}
+};
+
+module.exports = renderVote;

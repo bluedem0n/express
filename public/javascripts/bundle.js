@@ -9835,9 +9835,48 @@ module.exports = {
 	setState : setState
 };
 },{}],82:[function(require,module,exports){
+var store = require('./start').store;
+
+module.exports = function () {
+	var mount = $('#options-mount');
+
+	console.log('test');
+	console.log(mount);
+
+	if (mount.length) {
+		mount.on('click', '.js-option', function () {
+			console.log('tes');
+			var option = $(this).data('option');
+
+			store.dispatch({
+				meta: {remote: true},
+				type: 'VOTE',
+				select: option,
+			});
+		});
+	}
+}
+},{"./start":87}],83:[function(require,module,exports){
 require('./start').listen();
 
-},{"./start":84}],83:[function(require,module,exports){
+require('./handleVote')();
+
+},{"./handleVote":82,"./start":87}],84:[function(require,module,exports){
+module.exports = function(socket) {
+	return function(store) {
+		return function(next) {
+		    return function(action) {
+				if (action.meta && action.meta.remote) {
+					socket.emit('action', action);
+				}
+
+		    	return next(action);
+		    }
+	    }
+	}
+}
+
+},{}],85:[function(require,module,exports){
 var core = require('./core');
 function reducer(state, action) {
 	if (typeof state === 'undefined') {
@@ -9857,23 +9896,69 @@ function reducer(state, action) {
 }
 
 module.exports = reducer;
-},{"./core":81}],84:[function(require,module,exports){
+},{"./core":81}],86:[function(require,module,exports){
+var store = require('./start').store;
+
+function renderVote(state) {
+	if (!state.vote) {
+		var mount = $('#options-mount');
+
+		if (mount.length) {
+			mount.append('<div>lo sentimos no hay votación activa</div>');
+		 }
+
+		 return null;
+	}
+
+	var pair = state.vote.pair;
+	var options = '';
+
+	var votedEntry = state.hasVoted;
+
+	var disabled = votedEntry
+		? 'disabled'
+		: '';
+
+	pair.forEach(function (ele) {
+		options += (
+			'<button type="button" class="opciones js-option" data-option="' + ele +'" ' + disabled + '>' +
+				ele +
+			'</button>'
+		);
+	});
+
+	if (votedEntry) {
+		options += '<div>Has votado por: ' + votedEntry + '</div>';
+	}
+
+	var mount = $('#options-mount');
+
+	if (mount.length) {
+		mount.empty();
+		mount.append(options);
+	}
+};
+
+module.exports = renderVote;
+
+},{"./start":87}],87:[function(require,module,exports){
 var redux = require('redux');
 var createLogger = require('redux-logger');
 var reducer = require('./reducer');
 var socket = require('socket.io-client')('http://localhost:8080');
+var remoteActionsMiddleware = require('./middleware');
 
 var logger = createLogger();
 
-var store = redux.createStore(reducer, redux.applyMiddleware(logger));
+var store = redux.createStore(reducer, redux.applyMiddleware(logger, remoteActionsMiddleware(socket)));
 
-//var renderVote = require('renderVote');
+var renderVote = require('./renderVote');
 //var renderResults = require('renderResults');
 //
-//store.subscribe(function () {
-//	renderVote();
+store.subscribe(function () {
+	renderVote(store.getState());
 //	renderResults();
-//});
+});
 
 function listen() {
 	socket.on('state', function(state){
@@ -9889,4 +9974,4 @@ module.exports = {
 	store:store
 };
 
-},{"./reducer":83,"redux":60,"redux-logger":54,"socket.io-client":62}]},{},[82]);
+},{"./middleware":84,"./reducer":85,"./renderVote":86,"redux":60,"redux-logger":54,"socket.io-client":62}]},{},[83]);
