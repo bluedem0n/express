@@ -8,7 +8,7 @@ function reducer(state, action) {
 	
 	switch(action.type){
 		case 'SET_STATE' : 
-			return core.setState(state, action.state);
+			return core.resetState(state, core.setState(state, action.state));
 		case 'VOTE'	:
 			return core.vote(state,action.select);
 	}

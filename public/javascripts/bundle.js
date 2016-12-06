@@ -9800,9 +9800,41 @@ yeast.decode = decode;
 module.exports = yeast;
 
 },{}],81:[function(require,module,exports){
-function setState(state,serverState){
+function arrayEquals(arr1, arr2) {
+	if (arr1.length !== arr2.length) {
+		return false;
+	}
+
+	for (var i = arr1.length; i--;) {
+		if (arr1[i] !== arr2[i]) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+function setState(state, serverState){
 	return Object.assign({},state, serverState);
-	
+}
+
+function resetState(state, mergedState) {
+
+	console.log('enters');
+	if (!state.vote || !mergedState.vote) {
+		return mergedState;
+	}
+
+
+
+	var pair = state.vote.pair;
+	var oldPair = mergedState.vote.pair;
+
+	if (mergedState.hasOwnProperty('hasVoted') && !arrayEquals(pair, oldPair)) {
+		delete mergedState.hasVoted;
+	}
+
+	return mergedState;
 }
 
 function findIfExists(arr, item) {
@@ -9832,20 +9864,40 @@ function vote(state,select){
 
 module.exports = {
 	vote : vote,
+	resetState: resetState,
 	setState : setState
 };
 },{}],82:[function(require,module,exports){
 var store = require('./start').store;
 
 module.exports = function () {
-	var mount = $('#options-mount');
+	var content = $('#results');
+	console.log('tst');
+	if (content.length) {
+		console.log('tst');
+		content.on('click', '.js-next', function () {
+			console.log('tst');
+			store.dispatch({
+				meta: {remote: true},
+				type: 'NEXT',
+			});
+		});
+	}
+}
+},{"./start":89}],83:[function(require,module,exports){
+var store = require('./start').store;
 
-	console.log('test');
-	console.log(mount);
+module.exports = function () {
+	var mount = $('#options-mount');
 
 	if (mount.length) {
 		mount.on('click', '.js-option', function () {
+<<<<<<< HEAD
 			var option = $(this).data('option');			
+=======
+			var option = $(this).data('option');
+
+>>>>>>> 26f3d48bf4db13c24e8c29526d5f0c67cfa378bb
 			store.dispatch({
 				meta: {remote: true},
 				type: 'VOTE',
@@ -9854,12 +9906,13 @@ module.exports = function () {
 		});	
 	}
 }
-},{"./start":87}],83:[function(require,module,exports){
+},{"./start":89}],84:[function(require,module,exports){
 require('./start').listen();
 
 require('./handleVote')();
+require('./handleResults')();
 
-},{"./handleVote":82,"./start":87}],84:[function(require,module,exports){
+},{"./handleResults":82,"./handleVote":83,"./start":89}],85:[function(require,module,exports){
 module.exports = function(socket) {
 	return function(store) {
 		return function(next) {
@@ -9874,7 +9927,7 @@ module.exports = function(socket) {
 	}
 }
 
-},{}],85:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 var core = require('./core');
 function reducer(state, action) {
 	if (typeof state === 'undefined') {
@@ -9885,7 +9938,7 @@ function reducer(state, action) {
 	
 	switch(action.type){
 		case 'SET_STATE' : 
-			return core.setState(state, action.state);
+			return core.resetState(state, core.setState(state, action.state));
 		case 'VOTE'	:
 			return core.vote(state,action.select);
 	}
@@ -9894,9 +9947,55 @@ function reducer(state, action) {
 }
 
 module.exports = reducer;
-},{"./core":81}],86:[function(require,module,exports){
-var store = require('./start').store;
+},{"./core":81}],87:[function(require,module,exports){
+function getVotes(stateVote, entry){
+	if(stateVote.tally && stateVote.tally.hasOwnProperty(entry)){
+		return stateVote.tally[entry];
+	}
+	return 0;
+}
 
+function renderResults(state) {
+	var results = '';
+
+	if (state.winner) {
+		results += (
+			'<div>' + 
+				'Ha ganado ' + state.winner +
+			'</div>'
+		);
+	} else if (state.vote) {
+		var pair = state.vote.pair;
+
+		pair.forEach(function(entry){
+			results += (
+				'<div>' +
+					entry + ': ' + getVotes(state.vote, entry) +
+				'</div>'
+			);
+		});
+
+		results += (
+			'<button class="js-next">' +
+				'next' +
+			'</button>'
+		);
+	} else {
+		results += (
+			'<div>lo sentimos no hay votación activa</div>'
+		);
+	}
+
+	var content = $('#results');
+
+	if (content.length){
+		content.empty();
+		content.append(results);
+	}
+}
+
+module.exports= renderResults;
+},{}],88:[function(require,module,exports){
 function renderVote(state) {
 	if (!state.vote) {
 		var mount = $('#options-mount');
@@ -9940,7 +10039,7 @@ function renderVote(state) {
 
 module.exports = renderVote;
 
-},{"./start":87}],87:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 var redux = require('redux');
 var createLogger = require('redux-logger');
 var reducer = require('./reducer');
@@ -9952,11 +10051,11 @@ var logger = createLogger();
 var store = redux.createStore(reducer, redux.applyMiddleware(logger, remoteActionsMiddleware(socket)));
 
 var renderVote = require('./renderVote');
-//var renderResults = require('renderResults');
-//
+var renderResults = require('./renderResults');
+
 store.subscribe(function () {
 	renderVote(store.getState());
-//	renderResults();
+	renderResults(store.getState());
 });
 
 function listen() {
@@ -9973,4 +10072,4 @@ module.exports = {
 	store:store
 };
 
-},{"./middleware":84,"./reducer":85,"./renderVote":86,"redux":60,"redux-logger":54,"socket.io-client":62}]},{},[83]);
+},{"./middleware":85,"./reducer":86,"./renderResults":87,"./renderVote":88,"redux":60,"redux-logger":54,"socket.io-client":62}]},{},[84]);

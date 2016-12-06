@@ -1,5 +1,3 @@
-var store = require('./start').store;
-
 function renderVote(state) {
 	if (!state.vote) {
 		var mount = $('#options-mount');
