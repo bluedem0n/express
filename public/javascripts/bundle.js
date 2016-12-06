@@ -9845,15 +9845,13 @@ module.exports = function () {
 
 	if (mount.length) {
 		mount.on('click', '.js-option', function () {
-			console.log('tes');
-			var option = $(this).data('option');
-
+			var option = $(this).data('option');			
 			store.dispatch({
 				meta: {remote: true},
 				type: 'VOTE',
 				select: option,
 			});
-		});
+		});	
 	}
 }
 },{"./start":87}],83:[function(require,module,exports){
@@ -9916,20 +9914,21 @@ function renderVote(state) {
 	var votedEntry = state.hasVoted;
 
 	var disabled = votedEntry
-		? 'disabled'
+		? 'disabled style="opacity:0.5"'
 		: '';
 
 	pair.forEach(function (ele) {
+		var voted = ele === votedEntry
+			? '<i  class="fa fa-check-circle fa-2x" ></i>'
+			: '';
+
 		options += (
 			'<button type="button" class="opciones js-option" data-option="' + ele +'" ' + disabled + '>' +
+				voted +
 				ele +
 			'</button>'
 		);
 	});
-
-	if (votedEntry) {
-		options += '<div>Has votado por: ' + votedEntry + '</div>';
-	}
 
 	var mount = $('#options-mount');
 
