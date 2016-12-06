@@ -9,11 +9,11 @@ var logger = createLogger();
 var store = redux.createStore(reducer, redux.applyMiddleware(logger, remoteActionsMiddleware(socket)));
 
 var renderVote = require('./renderVote');
-//var renderResults = require('renderResults');
-//
+var renderResults = require('./renderResults');
+
 store.subscribe(function () {
 	renderVote(store.getState());
-//	renderResults();
+	renderResults(store.getState());
 });
 
 function listen() {
