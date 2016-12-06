@@ -15,20 +15,21 @@ function renderVote(state) {
 	var votedEntry = state.hasVoted;
 
 	var disabled = votedEntry
-		? 'disabled'
+		? 'disabled style="opacity:0.5"'
 		: '';
 
 	pair.forEach(function (ele) {
+		var voted = ele === votedEntry
+			? '<i  class="fa fa-check-circle fa-2x" ></i>'
+			: '';
+
 		options += (
 			'<button type="button" class="opciones js-option" data-option="' + ele +'" ' + disabled + '>' +
+				voted +
 				ele +
 			'</button>'
 		);
 	});
-
-	if (votedEntry) {
-		options += '<div>Has votado por: ' + votedEntry + '</div>';
-	}
 
 	var mount = $('#options-mount');
 
