@@ -6,4 +6,16 @@ Además, un moderador decidirá en qué momento se detiene la votación de esas 
 
 Gracias a "Votaciones" se sabrá cuál es la película que se llevará el Oscar a mejor películla del año 2016.
 
+###Team Member
+* Michelle Seguil
+* Sthefany Floriano
+* Liz Ruelas
+* Alexandra Fernández
+* Alfredo
+* Elizabeth
+* GianLuca
+* Mapi
+* Cesi
+* Kenneth
+
 
