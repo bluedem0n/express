@@ -1,6 +1,38 @@
-function setState(state,serverState){
+function arrayEquals(arr1, arr2) {
+	if (arr1.length !== arr2.length) {
+		return false;
+	}
+
+	for (var i = arr1.length; i--;) {
+		if (arr1[i] !== arr2[i]) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+function setState(state, serverState){
 	return Object.assign({},state, serverState);
-	
+}
+
+function resetState(state, mergedState) {
+
+	console.log('enters');
+	if (!state.vote || !mergedState.vote) {
+		return mergedState;
+	}
+
+
+
+	var pair = state.vote.pair;
+	var oldPair = mergedState.vote.pair;
+
+	if (mergedState.hasOwnProperty('hasVoted') && !arrayEquals(pair, oldPair)) {
+		delete mergedState.hasVoted;
+	}
+
+	return mergedState;
 }
 
 function findIfExists(arr, item) {
@@ -30,5 +62,6 @@ function vote(state,select){
 
 module.exports = {
 	vote : vote,
+	resetState: resetState,
 	setState : setState
 };
