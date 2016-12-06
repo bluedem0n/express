@@ -5,13 +5,12 @@ module.exports = function () {
 
 	if (mount.length) {
 		mount.on('click', '.js-option', function () {
-			var option = $(this).data('option');
-
+			var option = $(this).data('option');			
 			store.dispatch({
 				meta: {remote: true},
 				type: 'VOTE',
 				select: option,
 			});
-		});
+		});	
 	}
 }

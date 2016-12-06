@@ -26,26 +26,17 @@
 }
 
 .opciones {
-	font-size: 1em;
-	width: 20em;
-	height: 10em;
+	font-size:21px;
+	width: 54%;
+	height: 127px;
 	margin: 0 auto;
 	position: relative;
-	margin-top: 4em;
+	margin-top: 50px;
 	display: block;
-	margin-bottom: 2em;
-	background-color: dodgerblue;
+	background-color: #1B1F3A;
 	color: white;
 }
-.check {
-    height: 80px;
-    width: 80px;
-    background-color: pink;
-    border-radius: 50%;
-    position: absolute;
-    right: -25px;
-    top: -25px;
-}
+
 
 
 .next{
@@ -125,4 +116,9 @@
 	font-size: 20px;
 	padding: 43px;
 	margin-bottom: 50px;
+}
+.fa {
+	position:absolute ;
+	top:2px;
+	left:75%;
 }
