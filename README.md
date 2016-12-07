@@ -14,6 +14,7 @@ Gracias a "Votaciones" se sabrá cuál es la película que se llevará el Oscar 
 * Socket.io
 * Express
 * Redux
+* Browserify
 
 
 ###Team Member
