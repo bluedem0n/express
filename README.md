@@ -4,7 +4,7 @@
 
 Además, un moderador decidirá en qué momento se detiene la votación de esas dos opciones para de allí pasar al siguiente "vs".
 
-Gracias a "Votaciones" se sabrá cuál es la película que se llevará el Oscar a mejor películla del año 2016.
+Gracias a "Votaciones" se sabrá cuál es la película que se llevará el Oscar a mejor película del año 2016.
 
 ###Team Member
 * Michelle Seguil
@@ -18,4 +18,11 @@ Gracias a "Votaciones" se sabrá cuál es la película que se llevará el Oscar 
 * Cesi
 * Kenneth
 
-
+###Tecnologías
+* HTML
+* CSS
+* Javascript
+* Jquery
+* Socket.io
+* Express
+* Redux
