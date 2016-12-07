@@ -6,6 +6,16 @@ Además, un moderador decidirá en qué momento se detiene la votación de esas 
 
 Gracias a "Votaciones" se sabrá cuál es la película que se llevará el Oscar a mejor película del año 2016.
 
+###Tecnologías
+* HTML
+* CSS
+* Javascript
+* Jquery
+* Socket.io
+* Express
+* Redux
+
+
 ###Team Member
 * Michelle Seguil
 * Sthefany Floriano
@@ -17,12 +27,3 @@ Gracias a "Votaciones" se sabrá cuál es la película que se llevará el Oscar 
 * Mapi
 * Cesi
 * Kenneth
-
-###Tecnologías
-* HTML
-* CSS
-* Javascript
-* Jquery
-* Socket.io
-* Express
-* Redux
